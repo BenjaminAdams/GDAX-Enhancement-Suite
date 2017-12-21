@@ -1,0 +1,29 @@
+{
+    "manifest_version":2,
+    "name": "GDAX Enhancement Suite",
+    "description": "GDAX Enhancement Suite",
+    "version": "0.1.4",
+    "permissions": [
+        "tabs"
+    ],
+    "web_accessible_resources": [
+        "content.js"
+    ],
+    "content_scripts": [
+        {
+            "all_frames": true,
+            "css": [
+                "styles.css"
+            ],
+            "js": [
+                "content.js",
+                "jquery.min.js"
+            ],
+            "matches": [
+                "http://www.gdax.com/*",
+                "https://www.gdax.com/*",
+                "https://gdax.com/*"
+            ]
+        }
+    ]
+}
