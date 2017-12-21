@@ -5,16 +5,22 @@ setTimeout(function initGES () {
     var currentPrice=0;
     var $sellsOrderSizeInfo
     var $sellsOrderSizeTotal
+    var $sellsTotalPriceInfoBox
+    var $sellsSum
     addOrdersInfoBoxes()
-    setInterval(calculateOpenSells,6000)
-    setInterval(updateCurrentPrice,1000)
+    setInterval(calculateOpenSells,2000)
+   // setInterval(updateCurrentPrice,1000)
 
     function addOrdersInfoBoxes(){
         if($('.sellOrderSizeTotal')[0]) return
 
-        $sellsOrderSizeInfoBox = $('<div class="sellOrderSizeTotal">oh hey</div> ')
+        $sellsOrderSizeInfoBox = $('<div class="sellBtn"> <div>Size</div> <div class="sellOrderSizeTotal">-</div></div>')
         $('[class*="UserPanel_cancel"]').after($sellsOrderSizeInfoBox)
         $sellsOrderSizeTotal = $('.sellOrderSizeTotal')
+
+        $sellsTotalPriceInfoBox = $('<div class="sellBtn"> <div>Sum</div> <div class="sellSum">-</div></div>')
+        $('[class*="UserPanel_cancel"]').after($sellsTotalPriceInfoBox)
+        $sellsSum = $('.sellSum')
     }
 
 
@@ -30,19 +36,35 @@ setTimeout(function initGES () {
             
            var orderSizeCol=$(el).find($('[class*="OrderList_order-size_"]'))
            var orderSize=orderSizeCol.text().match(/\d+/g)
-           orderSizeSum += Number.parseFloat(orderSize[0] + '.' +orderSize[1])
-
+           orderSize = Number.parseFloat(orderSize[0] + '.' +orderSize[1])
+        
            var priceCol=$(el).find($('[class*="OrderList_order-price_"]'))
            var desiredPrice= combineWholeAndPart(priceCol)
-           sellsPriceSum += (desiredPrice * orderSizeSum)
-			
-        })
+           var calculatedSalePrice=(desiredPrice * orderSize)
+           sellsPriceSum += calculatedSalePrice
+           orderSizeSum += orderSize
+            
+           //insert the final price after the desired price
+           updateCalculatedPrice(priceCol,calculatedSalePrice)
+          // priceCol.append('<span class="calculatedPrice">' +  calculatedSalePrice + '</span>')
+
+        })    
+
+        $sellsOrderSizeTotal.text(orderSizeSum.toFixed(6).toString())
+        $sellsSum.text('$'+sellsPriceSum.formatMoney())
+
+    }
+
+    function updateCalculatedPrice(priceCol,calculatedSalePrice){
+        var newHtml='<span class="calculatedPrice">(' +  calculatedSalePrice.formatMoney() + ')</span>'
+
+        if(priceCol.html().includes('calculatedPrice') ==false){
+            priceCol.append(newHtml)
+        }else {
+           var found= priceCol.find($('.calculatedPrice'))
+           found.html(newHtml)
+        }
         
-        console.log(orderSizeSum.toFixed(2))
-        console.log(sellsPriceSum.toFixed(4))
-
-        $sellsOrderSizeTotal.text(sellsPriceSum.toFixed(4))
-
     }
 
     function combineWholeAndPart(el) {
@@ -59,6 +81,17 @@ setTimeout(function initGES () {
         var found=$('[class*="MarketInfo_market-"]')
         currentPrice= found.text()
     }
+
+    Number.prototype.formatMoney = function(c, d, t){
+        var n = this, 
+            c = isNaN(c = Math.abs(c)) ? 2 : c, 
+            d = d == undefined ? "." : d, 
+            t = t == undefined ? "," : t, 
+            s = n < 0 ? "-" : "", 
+            i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
+            j = (j = i.length) > 3 ? j % 3 : 0;
+           return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+         };
 
 
 

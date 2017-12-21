@@ -1,3 +1,28 @@
+
+.sellBtn{
+    background-color: #ff6939;
+    border-bottom-color: #fff;
+    color: #fff;
+    padding:5px;
+    margin-left:5px;
+    flex: 1;
+    border-radius: 5px;
+    font-size: 12px;
+    line-height: 12px;
+    text-align: center;
+    cursor: pointer;
+    font-family: "opensans",sans-serif,"btcglyph";
+    font-weight: bold;
+}
+
+.calculatedPrice {
+    margin-left:2px;
+    font-size: 10px;
+    color:#4da53c;
+}
+
+
+
 /* The Modal (background) */
 #nyop .modal {
     display: none; /* Hidden by default */
