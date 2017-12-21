@@ -41,6 +41,7 @@ setTimeout(function initGES () {
 
     function calculateOpenOrders(buyOrSell){       
         var priceSum=0
+        var priceSumTxt;
         var orderSizeSum=0
         var orderSizeSumTxt;
         addOrdersInfoBoxes()
@@ -71,14 +72,20 @@ setTimeout(function initGES () {
         }else {
             orderSizeSumTxt = orderSizeSum.toFixed(5).toString()
         }
+
+        if(!priceSum) {
+            priceSumTxt='-'
+        }else {
+            priceSumTxt = currencySymbol+priceSum.formatMoney()
+        }
          
 
         if(buyOrSell==='sell'){
             $sellsOrderSizeTotal.text(orderSizeSumTxt)
-            $sellsSum.text(currencySymbol+priceSum.formatMoney())
+            $sellsSum.text(priceSumTxt)
         }else {
             $buyOrderSizeTotal.text(orderSizeSumTxt)
-            $buysSum.text(currencySymbol+priceSum.formatMoney())
+            $buysSum.text(priceSumTxt)
         }
      
 
