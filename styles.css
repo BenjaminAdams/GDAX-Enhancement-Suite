@@ -1,7 +1,4 @@
-
-.sellBtn{
-    background-color: #ff6939;
-    border-bottom-color: #fff;
+.infoBox {
     color: #fff;
     padding:5px;
     margin-left:5px;
@@ -10,9 +7,16 @@
     font-size: 12px;
     line-height: 12px;
     text-align: center;
-    cursor: pointer;
+    border-bottom-color: #fff;
     font-family: "opensans",sans-serif,"btcglyph";
     font-weight: bold;
+}
+.sellBtn{
+    background-color: #ff6939;
+}
+
+.buyBtn{
+    background-color: #4da53c;;
 }
 
 .calculatedPrice {

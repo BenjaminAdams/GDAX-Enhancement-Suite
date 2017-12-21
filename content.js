@@ -5,58 +5,87 @@ setTimeout(function initGES () {
     var currentPrice=0;
     var $sellsOrderSizeInfo
     var $sellsOrderSizeTotal
-    var $sellsTotalPriceInfoBox
     var $sellsSum
+    var $buysSum
+    var currencySymbol='$' //todo, find users local symbol
+
     addOrdersInfoBoxes()
-    setInterval(calculateOpenSells,2000)
-   // setInterval(updateCurrentPrice,1000)
+
+    setInterval(function(){
+        calculateOpenOrders('sell')
+        calculateOpenOrders('buy')
+    },2000)
+
+    setInterval(updateCurrentPrice,1000)
 
     function addOrdersInfoBoxes(){
         if($('.sellOrderSizeTotal')[0]) return
 
-        $sellsOrderSizeInfoBox = $('<div class="sellBtn"> <div>Size</div> <div class="sellOrderSizeTotal">-</div></div>')
+        var $sellsOrderSizeInfoBox = $('<div class="sellBtn infoBox"> <div>Size</div> <div class="sellOrderSizeTotal">-</div></div>')
         $('[class*="UserPanel_cancel"]').after($sellsOrderSizeInfoBox)
         $sellsOrderSizeTotal = $('.sellOrderSizeTotal')
 
-        $sellsTotalPriceInfoBox = $('<div class="sellBtn"> <div>Sum</div> <div class="sellSum">-</div></div>')
+        var $sellsTotalPriceInfoBox = $('<div class="sellBtn infoBox"> <div>Sum</div> <div class="sellSum">-</div></div>')
         $('[class*="UserPanel_cancel"]').after($sellsTotalPriceInfoBox)
         $sellsSum = $('.sellSum')
+
+        var $buysOrderSizeInfoBox = $('<div class="buyBtn infoBox"> <div>Size</div> <div class="buyOrderSizeTotal">-</div></div>')
+        $('[class*="UserPanel_cancel"]').after($buysOrderSizeInfoBox)
+        $buyOrderSizeTotal = $('.buyOrderSizeTotal')
+
+        var $buysTotalPriceInfoBox = $('<div class="buyBtn infoBox"> <div>Sum</div> <div class="buySum">-</div></div>')
+        $('[class*="UserPanel_cancel"]').after($buysTotalPriceInfoBox)
+        $buysSum = $('.buysSum')
     }
 
 
-    function calculateOpenSells(){       
-        var sellsPriceSum=0
+    function calculateOpenOrders(buyOrSell){       
+        var priceSum=0
         var orderSizeSum=0
+        var orderSizeSumTxt;
         addOrdersInfoBoxes()
 
-            
-
         $('[class*=" OrderList_row"]').each(function (i, el) {
-			if(el.className.includes('header')) return
-            
-           var orderSizeCol=$(el).find($('[class*="OrderList_order-size_"]'))
+            if(el.className.includes('header')) return
+            var $el= $(el)
+
+            if(buyOrSell==='sell' && $el.html().includes('OrderList_sell_') ===false) return
+            if(buyOrSell==='buy' && $el.html().includes('OrderList_buy_') ===false) return 
+
+           var orderSizeCol= $el.find($('[class*="OrderList_order-size_"]'))
            var orderSize=orderSizeCol.text().match(/\d+/g)
            orderSize = Number.parseFloat(orderSize[0] + '.' +orderSize[1])
         
-           var priceCol=$(el).find($('[class*="OrderList_order-price_"]'))
+           var priceCol= $el.find($('[class*="OrderList_order-price_"]'))
            var desiredPrice= combineWholeAndPart(priceCol)
            var calculatedSalePrice=(desiredPrice * orderSize)
-           sellsPriceSum += calculatedSalePrice
+           priceSum += calculatedSalePrice
            orderSizeSum += orderSize
             
            //insert the final price after the desired price
-           updateCalculatedPrice(priceCol,calculatedSalePrice)
-          // priceCol.append('<span class="calculatedPrice">' +  calculatedSalePrice + '</span>')
-
+           updateCalculatedPrice(priceCol, calculatedSalePrice)
         })    
 
-        $sellsOrderSizeTotal.text(orderSizeSum.toFixed(6).toString())
-        $sellsSum.text('$'+sellsPriceSum.formatMoney())
+        if(!orderSizeSum) {
+            orderSizeSumTxt='-'
+        }else {
+            orderSizeSumTxt = orderSizeSum.toFixed(5).toString()
+        }
+         
+
+        if(buyOrSell==='sell'){
+            $sellsOrderSizeTotal.text(orderSizeSumTxt)
+            $sellsSum.text(currencySymbol+priceSum.formatMoney())
+        }else {
+            $buyOrderSizeTotal.text(orderSizeSumTxt)
+            $buysSum.text(currencySymbol+priceSum.formatMoney())
+        }
+     
 
     }
 
-    function updateCalculatedPrice(priceCol,calculatedSalePrice){
-        var newHtml='<span class="calculatedPrice">(' +  calculatedSalePrice.formatMoney() + ')</span>'
+    function updateCalculatedPrice(priceCol, calculatedSalePrice){
+        var newHtml='<span class="calculatedPrice">(' + currencySymbol +  calculatedSalePrice.formatMoney() + ')</span>'
 
         if(priceCol.html().includes('calculatedPrice') ==false){
             priceCol.append(newHtml)
