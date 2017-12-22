@@ -26,7 +26,7 @@ setTimeout(function initGES () {
 
         var color='green'
         if(parseFloat(pair.percent_change_1h) < 0 ){
-            color=red;
+            color='red';
         }
 
         newHtml=pair.symbol + '<span class="'+color+' topPrice"> '+pair.price_usd+'</span>'
