@@ -1,13 +1,20 @@
 
+window.GES= {
+    currencySymbol: '$',
+    currencyIso:'USD'
 
+};
 
 setTimeout(function initGES () {
     var currentPrice=0;
     var $sellsOrderSizeInfo
     var $sellsOrderSizeTotal
     var $sellsSum
+    var $buyOrderSizeTotal
     var $buysSum
     var currencySymbol='$' //todo, find users local symbol
+    window.currencySymbol =currencySymbol
+    var currencyIso= 'USD'
 
     addOrdersInfoBoxes()
 
@@ -17,6 +24,14 @@ setTimeout(function initGES () {
     },2000)
 
     setInterval(updateCurrentPrice,1000)
+    setInterval(checkOtherMarkets,1000)
+
+
+    //https://blockchain.info/ticker only gets BTC
+    function checkOtherMarkets(){
+        //todo call some API to get the price in all other markets
+    }
+
 
     function addOrdersInfoBoxes(){
         if($('.sellOrderSizeTotal')[0]) return
@@ -33,7 +48,7 @@ setTimeout(function initGES () {
         $('[class*="UserPanel_cancel"]').after($buysOrderSizeInfoBox)
         $buyOrderSizeTotal = $('.buyOrderSizeTotal')
 
-        var $buysTotalPriceInfoBox = $('<div class="buyBtn infoBox"> <div>Sum</div> <div class="buySum">-</div></div>')
+        var $buysTotalPriceInfoBox = $('<div class="buyBtn infoBox"> <div>Sum</div> <div class="buysSum">-</div></div>')
         $('[class*="UserPanel_cancel"]').after($buysTotalPriceInfoBox)
         $buysSum = $('.buysSum')
     }
@@ -58,7 +73,7 @@ setTimeout(function initGES () {
            orderSize = Number.parseFloat(orderSize[0] + '.' +orderSize[1])
         
            var priceCol= $el.find($('[class*="OrderList_order-price_"]'))
-           var desiredPrice= combineWholeAndPart(priceCol)
+           var desiredPrice= combineWholeAndPart($(priceCol))
            var calculatedSalePrice=(desiredPrice * orderSize)
            priceSum += calculatedSalePrice
            orderSizeSum += orderSize
@@ -103,19 +118,23 @@ setTimeout(function initGES () {
         
     }
 
-    function combineWholeAndPart(el) {
-        var wholeDiv=$(el).find($('.whole'))
+    function combineWholeAndPart($el) {
+        var tmp=$el.text()
+        if($el.text().includes('MKT')) return currentPrice
+
+        var wholeDiv=$el.find($('.whole'))
         var whole=wholeDiv.text()
 
-        var partDiv=$(el).find($('.part'))
+        var partDiv=$el.find($('.part'))
         var part=partDiv.text()
         return Number.parseFloat(whole + '.' + part)
     }
 
 
     function updateCurrentPrice(){
-        var found=$('[class*="MarketInfo_market-"]')
-        currentPrice= found.text()
+        var found=$('[class*="ZoomControls_midprice_"]')
+        var tmp=found.text()
+        currentPrice=parseNumber(found.text())
     }
 
     Number.prototype.formatMoney = function(c, d, t){
@@ -129,6 +148,14 @@ setTimeout(function initGES () {
            return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
          };
 
+         function parseNumber(str)
+         {
+             str = (str + '').replace(/[^\d,.-]/g, '')    // just digits, separators and sign
+             var sign = str.charAt(0) === '-' ? '-' : '+' // store sign
+             var minor = str.match(/[.,](\d+)$/)          // filter decimals
+             str = str.replace(/[.,]\d*$/, '').replace(/\D/g, '')      // remove decimals and any integer separator
+             return Number(sign + str + (minor ? '.' + minor[1] : '')) // build number
+         }
 
 
 

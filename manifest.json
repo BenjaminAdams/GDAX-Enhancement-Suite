@@ -17,6 +17,7 @@
             ],
             "js": [
                 "content.js",
+                "ticker.js",
                 "jquery.min.js"
             ],
             "matches": [
