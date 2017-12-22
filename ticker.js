@@ -1,9 +1,9 @@
 setTimeout(function initGES () {
     var $els = []    
     var root=$('[class*="Navbar_nav-wrapper_"]')
-    var $ticker=$('<div class="topTicker"></div>')
+    var $ticker=$('<marquee class="topTicker"></marquee>')
     root.append($ticker)
-    setInterval(updatePrices,1000)
+    setInterval(updatePrices,5000)
 
     function updatePrices(){
         $.ajax({
