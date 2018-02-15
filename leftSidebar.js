@@ -2,16 +2,21 @@ window.startLeftSidebar = function () {
     var $binancePrice = 0
     var $bitfinexPrice = 0
     var $gdaxPrice = 0
-	 window.updatePricesInterval= false
 
-    initRegions()
+	console.log('loading left sidebar')
 	
-	if(window.updatePricesInterval===false){
-		window.updatePricesInterval = setInterval(updatePrices, 1400)
+
+	
+	if(window.updatePricesInterval == null || typeof( window.updatePricesInterval) == 'undefined' ){
+		initRegions()
+		window.updatePricesInterval = setInterval(updatePrices, 1800)
 		loadBitfinexWS()
+	}else {
+			clearInterval(window.updatePricesInterval)
+			window.updatePricesInterval = setInterval(updatePrices, 1800)
+			initRegions()
+			console.log('I did not restart leftsidebar')
 	}
-
-
 
     function updatePrices() {
         updateBinance()
@@ -92,3 +97,7 @@ window.startLeftSidebar = function () {
 
     }
 }
+
+
+setTimeout(window.startLeftSidebar,4000)
+

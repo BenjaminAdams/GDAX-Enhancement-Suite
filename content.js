@@ -28,7 +28,7 @@ setTimeout(function initGES() {
     function addOrdersInfoBoxes() {
         if ($('.sellOrderSizeTotal')[0]) return
 
-        window.startLeftSidebar()
+       // window.startLeftSidebar()
 
         var $sellsOrderSizeInfoBox = $('<div class="sellBtn infoBox"> <div>Size</div> <div class="sellOrderSizeTotal">-</div></div>')
         $('[class*="UserPanel_cancel"]').after($sellsOrderSizeInfoBox)
