@@ -18,6 +18,7 @@
             "js": [
                 "content.js",
                 "ticker.js",
+                "leftSidebar.js",
                 "jquery.min.js"
             ],
             "matches": [

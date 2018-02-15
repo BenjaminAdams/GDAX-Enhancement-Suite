@@ -4,11 +4,6 @@ window.GES = {
     currencyIso: 'USD'
 };
 
-window.processMyData = function processMyData(data) {
-    console.log(data);
-}
-
-
 setTimeout(function initGES() {
     var currentPrice = 0;
     var $sellsOrderSizeInfo
@@ -16,7 +11,6 @@ setTimeout(function initGES() {
     var $sellsSum
     var $buyOrderSizeTotal
     var $buysSum
-    var $binanceBox
     var currencySymbol = '$' //todo, find users local symbol
     window.currencySymbol = currencySymbol
     var currencyIso = 'USD'
@@ -29,35 +23,12 @@ setTimeout(function initGES() {
     }, 2000)
 
     setInterval(updateCurrentPrice, 1000)
-    setInterval(updateBinance, 600)
-
-
-    function updateBinance() {
-        $.ajax({
-            method: "GET",
-
-            url: "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT",
-            dataType: 'json',
-        }).success(function (data, x, y) {
-            if (!data || !data.price) return
-            var price = parseFloat(data.price).toFixed(2)
-
-            if (price > currentPrice) {
-                price = '<span class="green">' + price + '</span>'
-            } else {
-                price = '<span class="red">' + price + '</span>'
-            }
-            $binanceBox.html(price)
-        });
-    }
 
 
     function addOrdersInfoBoxes() {
         if ($('.sellOrderSizeTotal')[0]) return
 
-        var $binanceBoxInner = $('<div class="binanceBox"></div>')
-        $('[class*="OrderForm_order-form_"]').after($binanceBoxInner)
-        $binanceBox = $('.binanceBox')
+        window.startLeftSidebar()
 
         var $sellsOrderSizeInfoBox = $('<div class="sellBtn infoBox"> <div>Size</div> <div class="sellOrderSizeTotal">-</div></div>')
         $('[class*="UserPanel_cancel"]').after($sellsOrderSizeInfoBox)
@@ -154,7 +125,7 @@ setTimeout(function initGES() {
     function updateCurrentPrice() {
         var found = $('[class*="ZoomControls_midprice_"]')
         var tmp = found.text()
-        currentPrice = parseNumber(found.text())
+        window.currentPrice = currentPrice = parseNumber(found.text())
     }
 
     Number.prototype.formatMoney = function (c, d, t) {
