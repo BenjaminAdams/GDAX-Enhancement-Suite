@@ -1,5 +1,5 @@
 {
-    "manifest_version":2,
+    "manifest_version": 2,
     "name": "GDAX Enhancement Suite",
     "description": "GDAX Enhancement Suite",
     "version": "0.1.4",
@@ -23,7 +23,9 @@
             "matches": [
                 "http://www.gdax.com/*",
                 "https://www.gdax.com/*",
-                "https://gdax.com/*"
+                "https://gdax.com/*",
+                "https://api.binance.com/*",
+                "https://api.binance.com/"
             ]
         }
     ]

@@ -27,7 +27,13 @@
 }
 
 
-
+.binanceBox {
+    padding:5px;
+    margin-top:25px;
+    font-size: 16px;
+    text-align: center;
+    font-family: "opensans",sans-serif,"btcglyph";
+}
 
 
 .infoBox {
