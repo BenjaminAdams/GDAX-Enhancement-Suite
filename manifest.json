@@ -26,7 +26,8 @@
                 "https://www.gdax.com/*",
                 "https://gdax.com/*",
                 "https://api.binance.com/*",
-                "https://api.binance.com/"
+                "https://api.binance.com/",
+                "https://api.bitfinex.com/"
             ]
         }
     ]

@@ -27,12 +27,23 @@
 }
 
 
-.binanceBox {
+.lsItem {
     padding:5px;
-    margin-top:25px;
+    margin-top:0px;
     font-size: 16px;
-    text-align: center;
+    text-align: left;
+    margin-left: 15px;
     font-family: "opensans",sans-serif,"btcglyph";
+}
+
+.lsItemTitle {
+    width:80px;
+    display: inline-block;
+}
+
+.lsPrice {
+    width:30px;
+    display: inline-block;
 }
 
 
