@@ -2,10 +2,15 @@ window.startLeftSidebar = function () {
     var $binancePrice = 0
     var $bitfinexPrice = 0
     var $gdaxPrice = 0
+	 window.updatePricesInterval= false
 
     initRegions()
-    setInterval(updatePrices, 1000)
-    loadBitfinexWS()
+	
+	if(window.updatePricesInterval===false){
+		window.updatePricesInterval = setInterval(updatePrices, 1400)
+		loadBitfinexWS()
+	}
+
 
 
     function updatePrices() {
